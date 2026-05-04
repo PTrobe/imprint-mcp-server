@@ -25,16 +25,7 @@ jobs:
           node-version: "22"
           registry-url: "https://registry.npmjs.org"
 
-      # OIDC trusted publishing krever npm >= 11.5.1. Node 22 LTS sender
-      # noen ganger npm 11.4.x. `npm install -g npm@latest` brakk i-place
-      # på siste forsøk; corepack er Node-teamets offisielle vei til
-      # tooling-versions og holder seg unna in-place upgrade-krasj.
-      - name: Pin npm version via corepack
-        run: |
-          corepack enable
-          npm install -g npm@11 --force
-
-      - name: Print versions
+      - name: Print versions (for debug)
         run: |
           node --version
           npm --version
