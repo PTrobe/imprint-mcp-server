@@ -1,6 +1,6 @@
 {
   "name": "imprint-mcp-server",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "MCP server exposing Imprint's local data (meeting notes, calendar, emails) to Claude.",
   "license": "MIT",
   "homepage": "https://github.com/PTrobe/imprint-mcp-server",
@@ -11,7 +11,14 @@
   "bugs": {
     "url": "https://github.com/PTrobe/imprint-mcp-server/issues"
   },
-  "keywords": ["mcp", "claude", "imprint", "model-context-protocol", "sqlite", "productivity"],
+  "keywords": [
+    "mcp",
+    "claude",
+    "imprint",
+    "model-context-protocol",
+    "sqlite",
+    "productivity"
+  ],
   "type": "module",
   "bin": {
     "imprint-mcp-server": "dist/index.js"
@@ -22,8 +29,13 @@
     "start": "node dist/index.js",
     "dev": "tsc && node dist/index.js"
   },
-  "files": ["dist", "README.md"],
-  "engines": { "node": ">=18" },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.0.4",
     "better-sqlite3": "^11.7.0",
