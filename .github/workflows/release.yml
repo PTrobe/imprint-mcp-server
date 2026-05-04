@@ -22,7 +22,10 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: "22"
+          # Node 24 ships med npm 11+, som er minimum for OIDC trusted
+          # publishing. Node 22 LTS sitter på npm 10.9.x og publish blir
+          # avvist med en misvisende 404.
+          node-version: "24"
           registry-url: "https://registry.npmjs.org"
 
       - name: Print versions (for debug)
