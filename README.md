@@ -110,6 +110,41 @@ Smoke-test by piping JSON-RPC at it:
 ) | node dist/index.js
 ```
 
+## Releasing
+
+Releases are published to npm via GitHub Actions using **OIDC trusted
+publishing** — no long-lived tokens are stored in the repo or secrets.
+
+To cut a release:
+
+```bash
+# 1. Bump version in package.json
+npm version patch  # or minor / major
+
+# 2. Push the tag
+git push --follow-tags
+```
+
+The `Release to npm` workflow runs on tag push, builds, and publishes with
+`--provenance` (a signed SLSA attestation linking the tarball to the exact
+commit + run — visible on the npm package page).
+
+### One-time npm setup (already done for `imprint-mcp-server`)
+
+On `npmjs.com → Packages → imprint-mcp-server → Settings → Trusted Publishers`,
+the following GitHub Actions config is registered:
+
+| Field | Value |
+| --- | --- |
+| Organization | `PTrobe` |
+| Repository | `imprint-mcp-server` |
+| Workflow filename | `release.yml` |
+| Environment name | _(empty)_ |
+
+This means npm will accept publishes from `.github/workflows/release.yml` on
+the `PTrobe/imprint-mcp-server` repo without any secret. Tokens with 90-day
+expirations stop being a maintenance burden.
+
 ## Roadmap
 
 - [ ] Tasks tool (requires Imprint to cache tasks in DB; today they're fetched live per provider)

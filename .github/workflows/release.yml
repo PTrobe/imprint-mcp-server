@@ -1,0 +1,50 @@
+name: Release to npm
+
+# Trigger on a pushed tag matching `vX.Y.Z`. Manual `workflow_dispatch`
+# also lets us re-run on demand.
+on:
+  push:
+    tags: ["v*.*.*"]
+  workflow_dispatch:
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      # OIDC: lets the workflow obtain a short-lived token from npm without
+      # us having to store NPM_TOKEN as a secret. npm validates that this
+      # exact (org, repo, workflow) is configured as a Trusted Publisher.
+      id-token: write
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          registry-url: "https://registry.npmjs.org"
+
+      - name: Install
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Verify version matches tag
+        # Catch the common foot-gun: tag pushed without bumping
+        # package.json version. Compares vX.Y.Z tag → X.Y.Z in package.json.
+        run: |
+          PKG_VERSION=$(node -p "require('./package.json').version")
+          TAG_VERSION="${GITHUB_REF_NAME#v}"
+          if [[ "$PKG_VERSION" != "$TAG_VERSION" ]]; then
+            echo "::error::package.json version ($PKG_VERSION) does not match tag ($TAG_VERSION)"
+            exit 1
+          fi
+        if: github.event_name == 'push'
+
+      - name: Publish to npm
+        # `--provenance` attaches a signed SLSA attestation linking the
+        # tarball back to this exact GitHub commit + workflow run. Anyone
+        # can audit it on the npm package page. Free win.
+        run: npm publish --access public --provenance
