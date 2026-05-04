@@ -1,6 +1,6 @@
 {
   "name": "imprint-mcp-server",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "MCP server exposing Imprint's local data (meeting notes, calendar, emails) to Claude.",
   "license": "MIT",
   "homepage": "https://github.com/PTrobe/imprint-mcp-server",
