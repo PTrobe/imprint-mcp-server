@@ -25,6 +25,16 @@ jobs:
           node-version: "22"
           registry-url: "https://registry.npmjs.org"
 
+      # OIDC trusted publishing krever npm >= 11.5.1. Node 22 LTS sender
+      # noen ganger npm 11.4.x — sørg for at vi alltid kjører nyeste.
+      - name: Upgrade npm to latest
+        run: npm install -g npm@latest
+
+      - name: Print versions
+        run: |
+          node --version
+          npm --version
+
       - name: Install
         run: npm ci
 
